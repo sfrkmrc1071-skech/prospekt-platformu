@@ -1,0 +1,105 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Default deny all
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Helper functions
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isAdmin() {
+      return isSignedIn() && (
+        request.auth.token.email == 'sfrkmrc1071@gmail.com' ||
+        (request.auth.token.keys().hasAny(['email']) && request.auth.token.email.matches('.*admin.*'))
+      );
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() > 0 && id.size() <= 128;
+    }
+
+    // Users collection
+    match /users/{userId} {
+      allow read: if isSignedIn();
+      allow create: if isSignedIn() && (request.auth.uid == userId || isAdmin());
+      allow update: if isSignedIn() && (request.auth.uid == userId || isAdmin());
+      allow delete: if isAdmin();
+    }
+
+    // Teams collection
+    match /teams/{teamId} {
+      allow read: if true; // Public view for football fans and scouts
+      allow create, update, delete: if isSignedIn();
+    }
+
+    // Players collection
+    match /players/{playerId} {
+      allow read: if true; // Public marketplace
+      allow create: if isSignedIn();
+      allow update, delete: if isSignedIn();
+    }
+
+    // Player Videos
+    match /player_videos/{videoId} {
+      allow read: if true;
+      allow create, update, delete: if isSignedIn();
+    }
+
+    // Player References
+    match /player_references/{referenceId} {
+      allow read: if true;
+      allow create, update, delete: if isSignedIn();
+    }
+
+    // Player Activities
+    match /player_activities/{activityId} {
+      allow read: if true;
+      allow create, update, delete: if isSignedIn();
+    }
+
+    // Player Team Histories
+    match /player_team_histories/{historyId} {
+      allow read: if true;
+      allow create, update, delete: if isSignedIn();
+    }
+
+    // Player Reviews
+    match /player_reviews/{reviewId} {
+      allow read: if true;
+      allow create: if isSignedIn();
+      allow update, delete: if isSignedIn() && (resource.data.reviewer_user_id == request.auth.uid || isAdmin());
+    }
+
+    // Messages
+    match /messages/{messageId} {
+      allow read: if isSignedIn() && (
+        resource.data.sender_id == request.auth.uid ||
+        resource.data.receiver_id == request.auth.uid ||
+        isAdmin()
+      );
+      allow create: if isSignedIn() && request.resource.data.sender_id == request.auth.uid;
+      allow update: if isSignedIn() && (
+        resource.data.sender_id == request.auth.uid ||
+        resource.data.receiver_id == request.auth.uid ||
+        isAdmin()
+      );
+      allow delete: if isSignedIn() && (resource.data.sender_id == request.auth.uid || isAdmin());
+    }
+
+    // Audit logs
+    match /audit_logs/{logId} {
+      allow read: if isSignedIn();
+      allow create: if isSignedIn();
+      allow update, delete: if isAdmin();
+    }
+  }
+}

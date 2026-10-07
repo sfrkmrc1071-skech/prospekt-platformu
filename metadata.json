@@ -1,0 +1,6 @@
+{
+  "name": "Prospekt - Futbolcu Pazar Yeri & Scout Platformu",
+  "description": "Laravel & MySQL mimarisi, Bootstrap arayüzü, rol/yetki yönetimi, soft delete, audit log ve tüm futbolcu pazar yeri modülleri.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

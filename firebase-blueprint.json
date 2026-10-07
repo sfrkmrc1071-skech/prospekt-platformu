@@ -1,0 +1,266 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "Sistem kullanıcısı veya futbolcu/scout profili",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Kullanıcı ID veya auth UID" },
+        "name": { "type": "string", "maxLength": 100, "description": "Ad Soyad" },
+        "email": { "type": "string", "maxLength": 150, "description": "E-posta adresi" },
+        "phone": { "type": "string", "maxLength": 30, "description": "Telefon numarası" },
+        "role_id": { "type": "number", "description": "Rol ID (1=Admin, 2=Scout, 3=Coach, 4=Player, 5=Manager)" },
+        "avatar": { "type": "string", "maxLength": 500, "description": "Profil avatar URL" },
+        "bio": { "type": "string", "maxLength": 1000, "description": "Kullanıcı biyografisi" },
+        "status": { "type": "string", "enum": ["active", "suspended", "pending"], "description": "Hesap durumu" },
+        "club_name": { "type": "string", "maxLength": 100, "description": "Bağlı kulüp / ajans" },
+        "created_at": { "type": "string", "description": "Oluşturulma zamanı" },
+        "created_by": { "type": "string", "description": "Oluşturan UID" },
+        "updated_at": { "type": "string", "description": "Güncellenme zamanı" },
+        "updated_by": { "type": "string", "description": "Güncelleyen UID" },
+        "deleted_at": { "type": "string", "description": "Soft delete zaman damgası" }
+      },
+      "required": ["id", "name", "email", "role_id"]
+    },
+    "Team": {
+      "title": "Team",
+      "description": "Resmi futbol kulübü ve takım bilgileri",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Takım ID" },
+        "name": { "type": "string", "maxLength": 100, "description": "Kulüp adı" },
+        "short_name": { "type": "string", "maxLength": 10, "description": "Kısa kod" },
+        "logo": { "type": "string", "maxLength": 500, "description": "Logo URL" },
+        "league": { "type": "string", "maxLength": 100, "description": "Lig" },
+        "city": { "type": "string", "maxLength": 100, "description": "Şehir" },
+        "stadium": { "type": "string", "maxLength": 100, "description": "Stadyum" },
+        "founded_year": { "type": "number", "description": "Kuruluş yılı" },
+        "website": { "type": "string", "maxLength": 200, "description": "Web sitesi" },
+        "created_at": { "type": "string", "description": "Oluşturulma zamanı" },
+        "created_by": { "type": "string", "description": "Oluşturan UID" },
+        "updated_at": { "type": "string", "description": "Güncellenme zamanı" },
+        "updated_by": { "type": "string", "description": "Güncelleyen UID" },
+        "deleted_at": { "type": "string", "description": "Soft delete zaman damgası" }
+      },
+      "required": ["id", "name", "short_name", "league"]
+    },
+    "Player": {
+      "title": "Player",
+      "description": "Futbolcu profili, fiziksel özellikleri ve mevkileri",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Futbolcu ID" },
+        "user_id": { "type": "string", "description": "İlişkili Kullanıcı UID" },
+        "first_name": { "type": "string", "maxLength": 60, "description": "Ad" },
+        "last_name": { "type": "string", "maxLength": 60, "description": "Soyad" },
+        "birth_date": { "type": "string", "maxLength": 20, "description": "Doğum tarihi" },
+        "height": { "type": "number", "description": "Boy (cm)" },
+        "weight": { "type": "number", "description": "Kilo (kg)" },
+        "preferred_foot": { "type": "string", "enum": ["Sağ", "Sol", "Her İkisi"], "description": "Baskın ayak" },
+        "primary_position": { "type": "string", "maxLength": 50, "description": "Birincil mevki" },
+        "current_team_id": { "type": "string", "description": "Mevcut kulüp ID" },
+        "photo": { "type": "string", "maxLength": 500, "description": "Fotoğraf URL" },
+        "bio": { "type": "string", "maxLength": 2000, "description": "Futbolcu bilgileri ve oyun stili" },
+        "market_value_eur": { "type": "number", "description": "Piyasa değeri (€)" },
+        "contract_until": { "type": "string", "maxLength": 20, "description": "Sözleşme sonu" },
+        "nationality": { "type": "string", "maxLength": 50, "description": "Uyruk" },
+        "jersey_number": { "type": "number", "description": "Forma numarası" },
+        "instagram_handle": { "type": "string", "maxLength": 50, "description": "Sosyal medya" },
+        "created_at": { "type": "string", "description": "Oluşturulma zamanı" },
+        "created_by": { "type": "string", "description": "Oluşturan UID" },
+        "updated_at": { "type": "string", "description": "Güncellenme zamanı" },
+        "updated_by": { "type": "string", "description": "Güncelleyen UID" },
+        "deleted_at": { "type": "string", "description": "Soft delete zaman damgası" }
+      },
+      "required": ["id", "first_name", "last_name", "primary_position", "height", "weight"]
+    },
+    "PlayerVideo": {
+      "title": "PlayerVideo",
+      "description": "Futbolcunun maç özetleri ve highlight video linkleri",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Video ID" },
+        "player_id": { "type": "string", "description": "Futbolcu ID" },
+        "title": { "type": "string", "maxLength": 200, "description": "Video başlığı" },
+        "video_url": { "type": "string", "maxLength": 500, "description": "Video linki (YouTube/Scout)" },
+        "video_type": { "type": "string", "enum": ["highlight", "match_clip", "training", "scout_report"], "description": "Video türü" },
+        "duration": { "type": "string", "maxLength": 20, "description": "Süre" },
+        "match_date": { "type": "string", "maxLength": 20, "description": "Maç tarihi" },
+        "description": { "type": "string", "maxLength": 1000, "description": "Açıklama" },
+        "created_at": { "type": "string", "description": "Oluşturulma zamanı" },
+        "created_by": { "type": "string", "description": "Oluşturan UID" },
+        "updated_at": { "type": "string", "description": "Güncellenme zamanı" },
+        "updated_by": { "type": "string", "description": "Güncelleyen UID" },
+        "deleted_at": { "type": "string", "description": "Soft delete zaman damgası" }
+      },
+      "required": ["id", "player_id", "title", "video_url"]
+    },
+    "PlayerReference": {
+      "title": "PlayerReference",
+      "description": "Futbolcu referans talepleri ve antrenör onayları",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Referans ID" },
+        "player_id": { "type": "string", "description": "Futbolcu ID" },
+        "referee_user_id": { "type": "string", "description": "Referans istenen Kullanıcı UID" },
+        "relation_type": { "type": "string", "maxLength": 100, "description": "İlişki türü" },
+        "status": { "type": "string", "enum": ["beklemede", "onaylandi", "reddedildi"], "description": "Onay durumu" },
+        "request_message": { "type": "string", "maxLength": 1000, "description": "Talep mesajı" },
+        "notes": { "type": "string", "maxLength": 2000, "description": "Onaylayan kişinin görüş ve değerlendirmesi" },
+        "decision_date": { "type": "string", "maxLength": 20, "description": "Karar tarihi" },
+        "created_at": { "type": "string", "description": "Oluşturulma zamanı" },
+        "created_by": { "type": "string", "description": "Oluşturan UID" },
+        "updated_at": { "type": "string", "description": "Güncellenme zamanı" },
+        "updated_by": { "type": "string", "description": "Güncelleyen UID" },
+        "deleted_at": { "type": "string", "description": "Soft delete zaman damgası" }
+      },
+      "required": ["id", "player_id", "referee_user_id", "relation_type", "status"]
+    },
+    "PlayerActivity": {
+      "title": "PlayerActivity",
+      "description": "Futbolcunun maçlardaki aktiviteleri (gol, asist, kurtarış vb.)",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Aktivite ID" },
+        "player_id": { "type": "string", "description": "Futbolcu ID" },
+        "season": { "type": "string", "maxLength": 20, "description": "Sezon" },
+        "team_id": { "type": "string", "description": "Oynadığı takım ID" },
+        "opponent_team_id": { "type": "string", "description": "Karşı takım ID" },
+        "activity_type": { "type": "string", "enum": ["gol", "asist", "kurtaris", "sari_kart", "kirmizi_kart", "macin_adami", "temiz_sayfa", "penalti_kurtarisi"], "description": "Aktivite türü" },
+        "minute": { "type": "number", "description": "Dakika" },
+        "match_week": { "type": "string", "maxLength": 50, "description": "Maç haftası" },
+        "notes": { "type": "string", "maxLength": 500, "description": "Notlar" },
+        "created_at": { "type": "string", "description": "Oluşturulma zamanı" },
+        "created_by": { "type": "string", "description": "Oluşturan UID" },
+        "updated_at": { "type": "string", "description": "Güncellenme zamanı" },
+        "updated_by": { "type": "string", "description": "Güncelleyen UID" },
+        "deleted_at": { "type": "string", "description": "Soft delete zaman damgası" }
+      },
+      "required": ["id", "player_id", "season", "activity_type", "minute"]
+    },
+    "PlayerTeamHistory": {
+      "title": "PlayerTeamHistory",
+      "description": "Futbolcunun kariyer ve geçmiş takım bilgileri",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Kariyer kayıt ID" },
+        "player_id": { "type": "string", "description": "Futbolcu ID" },
+        "team_id": { "type": "string", "description": "Takım ID" },
+        "start_year": { "type": "number", "description": "Başlangıç yılı" },
+        "end_year": { "type": "number", "description": "Bitiş yılı (null ise güncel)" },
+        "position": { "type": "string", "maxLength": 50, "description": "Oynadığı mevki" },
+        "appearances": { "type": "number", "description": "Maç sayısı" },
+        "goals": { "type": "number", "description": "Gol sayısı" },
+        "assists": { "type": "number", "description": "Asist sayısı" },
+        "achievements": { "type": "string", "maxLength": 255, "description": "Kupalar ve başarılar" },
+        "created_at": { "type": "string", "description": "Oluşturulma zamanı" },
+        "created_by": { "type": "string", "description": "Oluşturan UID" },
+        "updated_at": { "type": "string", "description": "Güncellenme zamanı" },
+        "updated_by": { "type": "string", "description": "Güncelleyen UID" },
+        "deleted_at": { "type": "string", "description": "Soft delete zaman damgası" }
+      },
+      "required": ["id", "player_id", "start_year", "position"]
+    },
+    "PlayerReview": {
+      "title": "PlayerReview",
+      "description": "Futbolcu değerlendirme ve yıldızlama raporu",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Değerlendirme ID" },
+        "player_id": { "type": "string", "description": "Futbolcu ID" },
+        "reviewer_user_id": { "type": "string", "description": "Değerlendiren Kullanıcı UID" },
+        "rating_overall": { "type": "number", "description": "Genel puan 1-5" },
+        "rating_technical": { "type": "number", "description": "Teknik puan 1-5" },
+        "rating_physical": { "type": "number", "description": "Fiziksel puan 1-5" },
+        "rating_mental": { "type": "number", "description": "Mental puan 1-5" },
+        "comment": { "type": "string", "maxLength": 2000, "description": "Scout yorumu" },
+        "scout_verdict": { "type": "string", "enum": ["İlk 11 Oyuncusu", "Yüksek Potansiyelli Genç", "Gelişime Açık", "Yıldız Adayı", "Rotasyon Oyuncusu"], "description": "Scout kararı" },
+        "created_at": { "type": "string", "description": "Oluşturulma zamanı" },
+        "created_by": { "type": "string", "description": "Oluşturan UID" },
+        "updated_at": { "type": "string", "description": "Güncellenme zamanı" },
+        "updated_by": { "type": "string", "description": "Güncelleyen UID" },
+        "deleted_at": { "type": "string", "description": "Soft delete zaman damgası" }
+      },
+      "required": ["id", "player_id", "reviewer_user_id", "rating_overall", "comment"]
+    },
+    "Message": {
+      "title": "Message",
+      "description": "Kullanıcılar ve futbolcular arası özel mesaj",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Mesaj ID" },
+        "sender_id": { "type": "string", "description": "Gönderen Kullanıcı UID" },
+        "receiver_id": { "type": "string", "description": "Alıcı Kullanıcı UID" },
+        "player_id": { "type": "string", "description": "İlgili Futbolcu ID" },
+        "subject": { "type": "string", "maxLength": 200, "description": "Mesaj konusu" },
+        "message_text": { "type": "string", "maxLength": 4000, "description": "Mesaj içeriği" },
+        "is_read": { "type": "boolean", "description": "Okundu mu" },
+        "created_at": { "type": "string", "description": "Oluşturulma zamanı" },
+        "created_by": { "type": "string", "description": "Oluşturan UID" },
+        "updated_at": { "type": "string", "description": "Güncellenme zamanı" },
+        "updated_by": { "type": "string", "description": "Güncelleyen UID" },
+        "deleted_at": { "type": "string", "description": "Soft delete zaman damgası" }
+      },
+      "required": ["id", "sender_id", "receiver_id", "subject", "message_text"]
+    },
+    "AuditLog": {
+      "title": "AuditLog",
+      "description": "Sistem denetim ve işlem logları",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Log ID" },
+        "action": { "type": "string", "enum": ["INSERT", "UPDATE", "DELETE", "RESTORE"], "description": "İşlem türü" },
+        "table_name": { "type": "string", "maxLength": 100, "description": "Etkilenen koleksiyon" },
+        "record_id": { "type": "string", "description": "Kayıt ID" },
+        "user_id": { "type": "string", "description": "İşlemi yapan Kullanıcı UID" },
+        "user_name": { "type": "string", "maxLength": 100, "description": "Kullanıcı adı" },
+        "ip_address": { "type": "string", "maxLength": 45, "description": "IP adresi" },
+        "changes_summary": { "type": "string", "maxLength": 1000, "description": "Değişiklik özeti" },
+        "created_at": { "type": "string", "description": "Oluşturulma zamanı" }
+      },
+      "required": ["id", "action", "table_name", "record_id", "user_id", "changes_summary"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/User" },
+      "description": "Kullanıcı profilleri"
+    },
+    "/teams/{teamId}": {
+      "schema": { "$ref": "#/entities/Team" },
+      "description": "Futbol kulüpleri ve takımlar"
+    },
+    "/players/{playerId}": {
+      "schema": { "$ref": "#/entities/Player" },
+      "description": "Futbolcu profilleri ve pazar yeri kayıtları"
+    },
+    "/player_videos/{videoId}": {
+      "schema": { "$ref": "#/entities/PlayerVideo" },
+      "description": "Futbolcuların video ve highlight kayıtları"
+    },
+    "/player_references/{referenceId}": {
+      "schema": { "$ref": "#/entities/PlayerReference" },
+      "description": "Futbolcu referans talepleri ve onayları"
+    },
+    "/player_activities/{activityId}": {
+      "schema": { "$ref": "#/entities/PlayerActivity" },
+      "description": "Futbolcu maç performans aktiviteleri"
+    },
+    "/player_team_histories/{historyId}": {
+      "schema": { "$ref": "#/entities/PlayerTeamHistory" },
+      "description": "Futbolcuların geçmiş takım ve kariyer kayıtları"
+    },
+    "/player_reviews/{reviewId}": {
+      "schema": { "$ref": "#/entities/PlayerReview" },
+      "description": "Scout ve kullanıcı değerlendirmeleri"
+    },
+    "/messages/{messageId}": {
+      "schema": { "$ref": "#/entities/Message" },
+      "description": "Özel scout ve futbolcu mesajlaşmaları"
+    },
+    "/audit_logs/{logId}": {
+      "schema": { "$ref": "#/entities/AuditLog" },
+      "description": "Sistem denetim ve aktivite logları"
+    }
+  }
+}
